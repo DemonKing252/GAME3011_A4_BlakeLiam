@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f6763f314a58f45b686cee065bad37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 0
+  difficulty: 1
   gridDimensions: {x: 24, y: 24}
   gridCharacterPrefabs:
   - {fileID: 1529992284442581061, guid: 2ce75326ee8dee74fac6665b310933e3, type: 3}
@@ -1665,7 +1665,12 @@ MonoBehaviour:
   - {fileID: 2038715384}
   - {fileID: 1892664396}
   timeText: {fileID: 1252426737}
+  wordLocations:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   startingTime: 180
+  inputFieldTMP: {fileID: 2098639436}
   currentTime: 0
 --- !u!114 &1892664396 stripped
 MonoBehaviour:

@@ -37,6 +37,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Vector2Int[] wordLocations = new Vector2Int[3];
 
     [SerializeField] private float startingTime = 180f;
+    [SerializeField] private TMP_InputField inputFieldTMP;
+
     public float currentTime;
     private int minutes = 0;
     private int seconds = 0;
@@ -106,18 +108,40 @@ public class GridManager : MonoBehaviour
             Debug.LogError("Code text count does not match selected code count [Exp Msg: " + e.Message + "]");
         }
 
-        for(int i = 0; i < selectedCodes.Count; i++)
+        int randomColumn = Random.Range(0, gridDimensions.x - selectedCodes[0].Length);
+        int randomRow1 = 0, randomRow2 = 1, randomRow3 = 2;
+        randomRow1 = Random.Range(0, gridDimensions.y);
+        randomColumn = 0;
+        wordLocations[0] = new Vector2Int(randomColumn, randomRow1);
+
+        for (int col = 0; col < selectedCodes[0].Length; col++)
         {
-            int randomColumn = Random.Range(0, gridDimensions.x - selectedCodes[i].Length);
-            int randomRow = Random.Range(0, gridDimensions.y);
+            grid[randomColumn + col, randomRow1].GridChar = selectedCodes[0][col];
+        }
 
-            for (int col = 0; col < selectedCodes[i].Length; col++)
-            {
-                grid[randomColumn + col, randomRow].GridChar = selectedCodes[i][col];
-                grid[randomColumn + col, randomRow].transform.GetComponent<Image>().color = Color.red;
-            }
+        do
+        {
+            randomColumn = Random.Range(0, gridDimensions.x - selectedCodes[1].Length);
+            randomRow2 = Random.Range(0, gridDimensions.y);
+        } while (randomRow2 == randomRow1);
+        wordLocations[1] = new Vector2Int(randomColumn, randomRow2);
 
-            //wordLocations[i] = new Vector2Int(randomColumn, randomRow);
+
+        for (int col = 0; col < selectedCodes[1].Length; col++)
+        {
+            grid[randomColumn + col, randomRow2].GridChar = selectedCodes[1][col];
+        }
+        
+        do
+        {
+            randomColumn = Random.Range(0, gridDimensions.x - selectedCodes[2].Length);
+            randomRow3 = Random.Range(0, gridDimensions.y);;            
+        } while (randomRow3 == randomRow2 || randomRow3 == randomRow1);
+        wordLocations[2] = new Vector2Int(randomColumn, randomRow3);
+
+        for (int col = 0; col < selectedCodes[2].Length; col++)
+        {
+            grid[randomColumn + col, randomRow3].GridChar = selectedCodes[2][col];
         }
 
     }
@@ -175,6 +199,7 @@ public class GridManager : MonoBehaviour
         int idx2 = Random.Range(min, max);
         int idx3 = Random.Range(min, max);
 
+
         do
         {
             idx2 = Random.Range(min, max);
@@ -184,11 +209,13 @@ public class GridManager : MonoBehaviour
             idx3 = Random.Range(min, max);
         } while (idx3 == idx1 || idx3 == idx2);
 
+        Debug.Log(idx1 + " " + idx2 + " " + idx3);
         return new int[] { idx1, idx2, idx3 };
     }
 
     public void OnCodeEntered(string value)
     {
+        inputFieldTMP.text = string.Empty;
         value = value.ToUpper();
         for (int i = 0; i < selectedCodes.Count; i++)
         {
@@ -197,10 +224,10 @@ public class GridManager : MonoBehaviour
                 lockedStats[i].transform.parent.GetComponent<Image>().color = new Color(0f, 1f, 0f, 100f/255f);
                 lockedStats[i].text = "[UNLOCKED]";
 
-                //for(int j = 0; j < selectedCodes[i].Length; j++)
-                //{
-                //    grid[wordLocations[i].x + j, wordLocations[i].y].transform.GetComponent<Image>().color = Color.green;
-                //}
+                for(int j = 0; j < selectedCodes[i].Length; j++)
+                {
+                    grid[wordLocations[i].x + j, wordLocations[i].y].transform.GetComponent<Image>().color = Color.green;
+                }
             }
         }
     }
