@@ -42,6 +42,9 @@ public class GridManager : MonoBehaviour
     public float currentTime;
     private int minutes = 0;
     private int seconds = 0;
+    private int codesUnlocked = 0;
+    
+    [SerializeField] private int maxCodes = 3;
 
     void Awake()
     {
@@ -94,7 +97,10 @@ public class GridManager : MonoBehaviour
                 {
                     int random = Random.Range(1, 101);
 
-                    if (random < 40)
+                    // At player skill of 100, theres an 10% chance for each character to be censored out
+                    // At player skill of 0, theres an 80% chance for each character to be censored out 
+                    float skill = Mathf.Lerp(80f, 10f, GameUtil.playerSkill / 100f);
+                    if (random < skill)
                     {
                         code[j] = '*';
                     }
@@ -135,7 +141,7 @@ public class GridManager : MonoBehaviour
         do
         {
             randomColumn = Random.Range(0, gridDimensions.x - selectedCodes[2].Length);
-            randomRow3 = Random.Range(0, gridDimensions.y);;            
+            randomRow3 = Random.Range(0, gridDimensions.y);     
         } while (randomRow3 == randomRow2 || randomRow3 == randomRow1);
         wordLocations[2] = new Vector2Int(randomColumn, randomRow3);
 
@@ -228,6 +234,13 @@ public class GridManager : MonoBehaviour
                 {
                     grid[wordLocations[i].x + j, wordLocations[i].y].transform.GetComponent<Image>().color = Color.green;
                 }
+                codesUnlocked++;
+                if (codesUnlocked >= 3)
+                {
+                    MenuController.Instance.OnAction((int)Action.Victory);
+                }
+
+                break;
             }
         }
     }
@@ -242,6 +255,12 @@ public class GridManager : MonoBehaviour
     void Update()
     {
         currentTime -= Time.deltaTime;
+        currentTime = Mathf.Clamp(currentTime, 0f, Mathf.Infinity);
+        if (currentTime <= 0f)
+        {
+            MenuController.Instance.OnAction((int)Action.Defeat);
+        }
+
         minutes = Mathf.FloorToInt(currentTime / 60);
         seconds = (int)currentTime % 60;
         string text = minutes + ":" + seconds.ToString("00");

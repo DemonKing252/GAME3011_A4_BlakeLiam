@@ -66,20 +66,22 @@ public class MenuController : MonoBehaviour
 
                 break;
             case Action.Victory:
-                gameCanvas.gameObject.SetActive(true);
+                gameCanvas.gameObject.SetActive(false);
                 menuCanvas.gameObject.SetActive(false);
                 loseCanvas.gameObject.SetActive(false);
                 winCanvas.gameObject.SetActive(true);
                 Time.timeScale = 0f;
                 break;
             case Action.Defeat:
-                gameCanvas.gameObject.SetActive(true);
+                gameCanvas.gameObject.SetActive(false);
                 menuCanvas.gameObject.SetActive(false);
                 loseCanvas.gameObject.SetActive(true);
                 winCanvas.gameObject.SetActive(false);
                 Time.timeScale = 0f;
                 break;
             case Action.PlayAgain:
+                GameUtil.difficulty = Difficulty.NORMAL;
+                GameUtil.playerSkill = 50f;
                 SceneManager.LoadScene("SampleScene");
 
                 break;
