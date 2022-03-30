@@ -15,7 +15,7 @@ public enum Difficulty
 
 public class GridManager : MonoBehaviour
 {
-    public Difficulty difficulty;
+
     [SerializeField] private Vector2Int gridDimensions;
     [SerializeField] private GridCharacter[] gridCharacterPrefabs;
     [SerializeField] private GridLayoutGroup layoutGroup;
@@ -48,13 +48,13 @@ public class GridManager : MonoBehaviour
         currentTime = startingTime;
         instance = this;
 
-        if (difficulty == Difficulty.EASY)
+        if (GameUtil.difficulty == Difficulty.EASY)
         {
             gridDimensions = new Vector2Int(6, 6);
             layoutGroup.cellSize = new Vector2(64f, 64f);
             layoutGroup.spacing = new Vector2(10f, 10f);
         }
-        else if (difficulty == Difficulty.NORMAL)
+        else if (GameUtil.difficulty == Difficulty.NORMAL)
         {
             gridDimensions = new Vector2Int(12, 12);
             layoutGroup.cellSize = new Vector2(32f, 32f);
@@ -72,7 +72,7 @@ public class GridManager : MonoBehaviour
         {
             for (int c = 0; c < gridDimensions.x; c++)
             {
-                GridCharacter ch = Instantiate(gridCharacterPrefabs[(int)difficulty], transform.position, Quaternion.identity, transform);
+                GridCharacter ch = Instantiate(gridCharacterPrefabs[(int)GameUtil.difficulty], transform.position, Quaternion.identity, transform);
 
                 int randomASCII = Random.Range(64, 91);
                 randomASCII = (randomASCII == 64 ? 95 : randomASCII);
@@ -171,21 +171,21 @@ public class GridManager : MonoBehaviour
     }
     private void ChooseRandomCodes()
     {
-        if (difficulty == Difficulty.EASY)
+        if (GameUtil.difficulty == Difficulty.EASY)
         {
             int[] indexes = GetRandomIndexes(0, easyCodes.Count);
 
             foreach (int i in indexes)
                 selectedCodes.Add(easyCodes[i]);
         }
-        else if (difficulty == Difficulty.NORMAL)
+        else if (GameUtil.difficulty == Difficulty.NORMAL)
         {
             int[] indexes = GetRandomIndexes(0, normalCodes.Count);
 
             foreach (int i in indexes)
                 selectedCodes.Add(normalCodes[i]);
         }
-        else if (difficulty == Difficulty.HARD)
+        else if (GameUtil.difficulty == Difficulty.HARD)
         {
             int[] indexes = GetRandomIndexes(0, hardCodes.Count);
 
